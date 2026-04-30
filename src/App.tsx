@@ -5,9 +5,13 @@ import {
   BriefcaseBusiness,
   Code2,
   Cpu,
+  ExternalLink,
   FileText,
+  FolderOpen,
   GraduationCap,
   Hammer,
+  LayoutGrid,
+  List,
   Minus,
   Palette,
   Plane,
@@ -54,8 +58,12 @@ const commands = [
   'OPEN PORTFOLIO',
   'OPEN CONTACT',
   'OPEN RESUME',
+  'PROJECTS',
+  'GITHUB',
   'HELP',
 ];
+
+const githubProfileUrl = 'https://github.com/rashil9955';
 
 type SkillAxis = {
   label: string;
@@ -81,6 +89,16 @@ type ExperienceItem = {
   };
 };
 
+type ProjectCategory = 'AI / Data' | 'Security' | 'Web Apps' | 'Systems' | 'Hardware' | 'Design';
+
+type ProjectItem = {
+  id: string;
+  title: string;
+  category: ProjectCategory;
+  description: string;
+  repo: string;
+};
+
 const skillAxes: SkillAxis[] = [
   { label: 'Software Development', rating: 82 },
   { label: 'Web & UI Design', rating: 80 },
@@ -92,6 +110,130 @@ const skillAxes: SkillAxis[] = [
   { label: 'Product Thinking', rating: 81 },
   { label: 'Technical Writing', rating: 79 },
   { label: 'Problem Solving', rating: 84 },
+];
+
+const projectCategories: ProjectCategory[] = [
+  'AI / Data',
+  'Security',
+  'Web Apps',
+  'Systems',
+  'Hardware',
+  'Design',
+];
+
+const projects: ProjectItem[] = [
+  {
+    id: 'portfolio-website',
+    title: 'QBASIC Portfolio Website',
+    category: 'Web Apps',
+    description:
+      'A retro QBASIC-inspired portfolio built with React, TypeScript, Vite, and interactive sections.',
+    repo: 'https://github.com/rashil9955/Portfolio-Website',
+  },
+  {
+    id: 'fraud-detection',
+    title: 'Fraud Detection System',
+    category: 'AI / Data',
+    description:
+      'A machine learning project for identifying suspicious transaction patterns and explaining fraud risk.',
+    repo: 'https://github.com/rashil9955/fraud-detection',
+  },
+  {
+    id: 'data-cleansing',
+    title: 'Data Cleansing Toolkit',
+    category: 'AI / Data',
+    description:
+      'Scripts and workflows for cleaning inconsistent datasets before analysis, reporting, or modeling.',
+    repo: 'https://github.com/rashil9955/data-cleansing-toolkit',
+  },
+  {
+    id: 'risk-scoring',
+    title: 'Risk Scoring Dashboard',
+    category: 'AI / Data',
+    description:
+      'A dashboard concept that turns raw indicators into readable risk scores and decision-support views.',
+    repo: 'https://github.com/rashil9955/risk-scoring-dashboard',
+  },
+  {
+    id: 'secure-communication',
+    title: 'Secure Communication App',
+    category: 'Security',
+    description:
+      'A secure messaging experiment focused on encryption concepts, authentication, and safe data handling.',
+    repo: 'https://github.com/rashil9955/secure-communication',
+  },
+  {
+    id: 'accessibility-automation',
+    title: 'Accessibility Automation',
+    category: 'Security',
+    description:
+      'Python automation for finding document and web accessibility issues more efficiently.',
+    repo: 'https://github.com/rashil9955/accessibility-automation',
+  },
+  {
+    id: 'object-detection',
+    title: 'Object Detection Experiment',
+    category: 'AI / Data',
+    description:
+      'A computer vision build exploring object detection workflows and practical image analysis.',
+    repo: 'https://github.com/rashil9955/object-detection',
+  },
+  {
+    id: 'web-dashboard',
+    title: 'Web Analytics Dashboard',
+    category: 'Web Apps',
+    description:
+      'A web dashboard for organizing metrics, visual summaries, and user-facing data views.',
+    repo: 'https://github.com/rashil9955/web-analytics-dashboard',
+  },
+  {
+    id: 'database-system',
+    title: 'Database Management System',
+    category: 'Systems',
+    description:
+      'A coursework-driven database project focused on schema design, queries, and structured records.',
+    repo: 'https://github.com/rashil9955/database-management-system',
+  },
+  {
+    id: 'csharp-apps',
+    title: 'C# Coursework Apps',
+    category: 'Systems',
+    description:
+      'Object-oriented programming projects built while learning C#, application structure, and persistence.',
+    repo: 'https://github.com/rashil9955/csharp-coursework',
+  },
+  {
+    id: 'drone-project',
+    title: 'Custom Drone Project',
+    category: 'Hardware',
+    description:
+      'A hands-on drone rebuild using motors, controllers, propellers, a custom frame, and flight testing.',
+    repo: 'https://github.com/rashil9955/custom-drone-project',
+  },
+  {
+    id: 'bb8-robot',
+    title: 'BB-8 Robot Project',
+    category: 'Hardware',
+    description:
+      'A BB-8 inspired robot prototype using a rolling sphere, internal drive system, and magnetic head coupling.',
+    repo: 'https://github.com/rashil9955/bb8-robot',
+  },
+  {
+    id: 'thekedar-ui',
+    title: 'Thekedar App UI/UX',
+    category: 'Design',
+    description:
+      'A UI/UX design project for a service platform connecting customers with local hardware providers.',
+    repo: 'https://github.com/rashil9955/thekedar-ui',
+  },
+  {
+    id: 'local-school-websites',
+    title: 'Local School Websites',
+    category: 'Web Apps',
+    description:
+      'Early hand-coded websites for local schools and companies, focused on layout, clarity, and usability.',
+    repo: 'https://github.com/rashil9955/local-school-websites',
+  },
 ];
 
 const experienceItems: ExperienceItem[] = [
@@ -622,6 +764,24 @@ function App() {
       return;
     }
 
+    if (normalized === 'PROJECTS') {
+      openSection('PROJECTS');
+      setHistory((current) => [{ kind: 'command', text: `> ${normalized}` }, ...current]);
+      setCommand('');
+      return;
+    }
+
+    if (normalized === 'GITHUB' || normalized === 'OPEN GITHUB') {
+      setActiveSection(null);
+      setHistory([
+        { kind: 'command', text: `> ${normalized}` },
+        { kind: 'system', text: `GitHub: ${githubProfileUrl}` },
+        { kind: 'system', text: 'Tip: type PROJECTS to open the projects page.' },
+      ]);
+      setCommand('');
+      return;
+    }
+
     const openMatch = normalized.match(/^OPEN (HOME|ABOUT|EXPERIENCE|PROJECTS|PORTFOLIO|CONTACT|RESUME)$/);
     if (openMatch) {
       openSection(openMatch[1] as SectionKey);
@@ -690,7 +850,7 @@ function QBasicWindow({
 
   return (
     <section
-      className={`qbasic-window${isExpandedMode ? ' is-expanded' : ''}`}
+      className={`qbasic-window${isExpandedMode ? ' is-expanded' : ''}${activeSection === 'PROJECTS' ? ' is-projects' : ''}`}
       onClick={() => inputRef.current?.focus()}
     >
       <div className="title-bar">
@@ -713,6 +873,7 @@ function QBasicWindow({
           <div />
           <span>▼</span>
         </div>
+        {activeSection === 'PROJECTS' ? <div className="scroll-cue">SCROLL<br />▼</div> : null}
         <div className="scrollbar scrollbar-x">
           <span>◄</span>
           <div />
@@ -780,13 +941,21 @@ function CodeScreen({
     );
   }
 
+  if (activeSection === 'PROJECTS') {
+    return (
+      <div className="code-screen projects-screen">
+        <ProjectsPage />
+      </div>
+    );
+  }
+
   return (
     <div className="code-screen">
       <div className="screen-content">
         {!activeSection && history.length === 0 ? <WatermarkHint /> : null}
         {history.map((line, index) => (
           <p key={`${line.text}-${index}`} className={`line-${line.kind}`}>
-            {line.text}
+            {linkifyTerminalText(line.text)}
           </p>
         ))}
         {activeSection ? (
@@ -827,6 +996,93 @@ function AboutPage() {
           becoming a stronger software engineer.
         </p>
       </div>
+    </article>
+  );
+}
+
+function ProjectsPage() {
+  const [view, setView] = useState<'category' | 'list'>('category');
+  const [activeCategory, setActiveCategory] = useState<ProjectCategory>('AI / Data');
+  const visibleProjects =
+    view === 'list' ? projects : projects.filter((project) => project.category === activeCategory);
+
+  return (
+    <article className="projects-page">
+      <header className="projects-header">
+        <p className="projects-kicker">LOAD PROJECTS.BAS</p>
+        <h1>Projects</h1>
+        <p>
+          Choose category view to browse by project type, or list view to see every build in one
+          long scroll.
+        </p>
+      </header>
+
+      <div className="project-view-switch" aria-label="Project view options">
+        <button
+          type="button"
+          className={view === 'category' ? 'is-active' : undefined}
+          onClick={() => setView('category')}
+        >
+          <LayoutGrid size={14} />
+          Category View
+        </button>
+        <button
+          type="button"
+          className={view === 'list' ? 'is-active' : undefined}
+          onClick={() => setView('list')}
+        >
+          <List size={14} />
+          List View
+        </button>
+      </div>
+
+      {view === 'category' ? (
+        <section className="project-category-panel" aria-label="Project categories">
+          <div className="project-category-grid">
+            {projectCategories.map((category) => {
+              const count = projects.filter((project) => project.category === category).length;
+
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  className={activeCategory === category ? 'is-active' : undefined}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  <FolderOpen size={16} />
+                  <span>{category}</span>
+                  <strong>{count}</strong>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="project-list" aria-label={view === 'list' ? 'All projects' : `${activeCategory} projects`}>
+        <div className="project-list-heading">
+          <span>{view === 'list' ? 'ALL PROJECTS' : activeCategory.toUpperCase()}</span>
+          <strong>{visibleProjects.length} FILES</strong>
+        </div>
+        {visibleProjects.map((project, index) => (
+          <article
+            key={project.id}
+            className="project-card"
+            style={{ '--project-index': index } as CSSProperties}
+          >
+            <div>
+              <span className="project-category">{project.category}</span>
+              <h2>{project.title}</h2>
+              <p>{project.description}</p>
+            </div>
+            <a href={project.repo} target="_blank" rel="noreferrer">
+              <Code2 size={15} />
+              GitHub Repo
+              <ExternalLink size={13} />
+            </a>
+          </article>
+        ))}
+      </section>
     </article>
   );
 }
@@ -1177,6 +1433,25 @@ function colorizeLine(line: string) {
         stringToken
       )}
       {match[3]}
+    </>
+  );
+}
+
+function linkifyTerminalText(text: string) {
+  const urlMatch = text.match(/https?:\/\/\S+/);
+  if (!urlMatch) return text;
+
+  const href = urlMatch[0];
+  const before = text.slice(0, urlMatch.index);
+  const after = text.slice((urlMatch.index ?? 0) + href.length);
+
+  return (
+    <>
+      {before}
+      <a href={href} target="_blank" rel="noreferrer">
+        {href}
+      </a>
+      {after}
     </>
   );
 }
