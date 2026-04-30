@@ -296,6 +296,18 @@ button {
   min-height: 1.2em;
 }
 
+.screen-content a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.screen-content a:hover,
+.screen-content a:focus-visible {
+  color: #fff56c;
+  outline: 1px solid #fff56c;
+  outline-offset: 2px;
+}
+
 .about-page {
   width: min(1080px, 100%);
   min-height: calc(100vh - 42px - clamp(4rem, 12vw, 11rem));

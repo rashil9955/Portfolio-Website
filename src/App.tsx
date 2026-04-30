@@ -569,9 +569,9 @@ const sectionText: Record<SectionKey, string[]> = {
   ],
   CONTACT: [
     'INPUT "Want to connect"; answer$',
-    'IF answer$ = "YES" THEN PRINT "Email: hello@example.com"',
-    'PRINT "LinkedIn: /in/your-profile"',
-    'PRINT "GitHub: github.com/your-handle"',
+    'IF answer$ = "YES" THEN PRINT "Email: r@rshibak.com"',
+    'PRINT "LinkedIn: https://www.linkedin.com/in/rshibak/"',
+    'PRINT "GitHub: https://github.com/rashil9955"',
   ],
   RESUME: [
     'OPEN "resume.pdf" FOR OUTPUT AS #1',
@@ -587,7 +587,8 @@ function App() {
   const [history, setHistory] = useState<HistoryLine[]>([]);
   const [command, setCommand] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const isExpandedMode = activeSection === 'ABOUT' || activeSection === 'EXPERIENCE';
+  const isExpandedMode =
+    activeSection === 'ABOUT' || activeSection === 'EXPERIENCE' || activeSection === 'CONTACT';
 
   const sectionLines = useMemo(
     () => (activeSection ? sectionText[activeSection] : []),
@@ -684,7 +685,8 @@ function QBasicWindow({
   onOpenSection,
   inputRef,
 }: QBasicWindowProps) {
-  const isExpandedMode = activeSection === 'ABOUT' || activeSection === 'EXPERIENCE';
+  const isExpandedMode =
+    activeSection === 'ABOUT' || activeSection === 'EXPERIENCE' || activeSection === 'CONTACT';
 
   return (
     <section
@@ -1160,13 +1162,33 @@ function colorizeLine(line: string) {
   const match = line.match(/^(.*?)(\".*\")(.*)$/);
   if (!match) return line || '\u00a0';
 
+  const stringValue = match[2].slice(1, -1);
+  const href = getStringTokenHref(stringValue);
+  const stringToken = <span className="string-token">{match[2]}</span>;
+
   return (
     <>
       {match[1]}
-      <span className="string-token">{match[2]}</span>
+      {href ? (
+        <a href={href} target={href.startsWith('mailto:') ? undefined : '_blank'} rel="noreferrer">
+          {stringToken}
+        </a>
+      ) : (
+        stringToken
+      )}
       {match[3]}
     </>
   );
+}
+
+function getStringTokenHref(value: string) {
+  const urlMatch = value.match(/https?:\/\/\S+/);
+  if (urlMatch) return urlMatch[0];
+
+  const emailMatch = value.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+  if (emailMatch) return `mailto:${emailMatch[0]}`;
+
+  return null;
 }
 
 function WatermarkHint() {
