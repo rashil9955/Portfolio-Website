@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc && vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "build": "tsc && tsc -p worker && vite build && node scripts/prerender.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "preview:worker": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "og-image": "sh scripts/render-images.sh"
   },
   "dependencies": {
     "@tailwindcss/vite": "latest",
@@ -19,7 +22,9 @@
     "vite": "latest"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261028.1",
     "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "wrangler": "^4.155.0"
   }
 }

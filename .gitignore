@@ -27,3 +27,7 @@ Thumbs.db
 # Editor files
 .vscode/
 .idea/
+
+# Wrangler local state
+.wrangler/
+.dev.vars*

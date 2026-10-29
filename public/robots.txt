@@ -1,0 +1,8 @@
+# rshibak.com — everything public is welcome to be indexed.
+# Utility pages (thank-you, 404) carry their own noindex tags instead of being blocked here,
+# so crawlers can still read those tags.
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://rshibak.com/sitemap.xml

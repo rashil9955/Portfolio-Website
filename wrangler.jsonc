@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rashil-portfolio-website",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-23",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // Serves dist/404.html with a real 404 status for unknown paths.
+    "not_found_handling": "404-page",
+    // /work serves work.html, so page URLs have no trailing slash.
+    "html_handling": "auto-trailing-slash",
+    // Only the contact API goes through the Worker; everything else is served as static files.
+    "run_worker_first": ["/api/*"]
+  },
+  // Sends to a verified Email Routing destination address. Needs Email Routing enabled on
+  // rshibak.com and rashil9955@gmail.com verified there (see README).
+  "send_email": [
+    {
+      "name": "CONTACT_EMAIL",
+      "destination_address": "rashil9955@gmail.com"
+    }
+  ],
+  // At most 3 contact submissions per minute from one IP address.
+  "ratelimits": [
+    {
+      "name": "CONTACT_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 3,
+        "period": 60
+      }
+    }
+  ],
+  "vars": {
+    "CONTACT_FROM": "contact@rshibak.com",
+    "CONTACT_TO": "rashil9955@gmail.com"
+  }
+}

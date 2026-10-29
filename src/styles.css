@@ -93,13 +93,25 @@ button {
   text-decoration: none;
 }
 
-.site-nav a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  font-weight: 700;
 }
 
-.site-nav a.is-active {
+/* Reserve the bold width up front so the links don't shift when one turns bold. */
+.site-nav-label {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.site-nav-label::after {
+  content: attr(data-label) / '';
   font-weight: 700;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  user-select: none;
 }
 
 /* Home */
@@ -166,9 +178,132 @@ button {
   margin-top: 31px;
 }
 
+/* Work: the nav sits above the title, and category filters sit below it. */
+.section-hero-nav-first .site-nav {
+  margin-top: min(352px, 30svh);
+}
+
+.section-hero-nav-first .section-title {
+  margin-top: 31px;
+}
+
+.work-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin-top: 31px;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: normal;
+}
+
+.work-filters button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.work-filters button:hover,
+.work-filters button:focus-visible,
+.work-filters button[aria-pressed='true'] {
+  font-weight: 700;
+}
+
 .section-body {
   position: relative;
   padding: clamp(120px, 18vw, 258px) 16px 0 var(--gutter);
+}
+
+/* Work › Graphic Design: a loose collage placed on the 1440px Figma frame, scaled to the page width. */
+.design-collage {
+  position: relative;
+  margin: 0 -16px 0 calc(-1 * var(--gutter));
+  aspect-ratio: 1440 / 1068;
+}
+
+.design-piece {
+  position: absolute;
+  height: auto;
+}
+
+.design-piece-aarps {
+  left: calc(5 / 1440 * 100%);
+  top: calc(17 / 1068 * 100%);
+  width: calc(346 / 1440 * 100%);
+}
+
+.design-piece-bnks-badge {
+  left: calc(880 / 1440 * 100%);
+  top: 0;
+  width: calc(507 / 1440 * 100%);
+}
+
+.design-piece-icaft {
+  left: calc(423 / 1440 * 100%);
+  top: calc(385 / 1068 * 100%);
+  width: calc(233 / 1440 * 100%);
+}
+
+.design-piece-bnks-mun {
+  left: calc(680 / 1440 * 100%);
+  top: calc(420 / 1068 * 100%);
+  width: calc(740 / 1440 * 100%);
+}
+
+.design-piece-rpmun {
+  left: calc(26 / 1440 * 100%);
+  top: calc(736 / 1068 * 100%);
+  width: calc(318 / 1440 * 100%);
+}
+
+/* On narrow screens the collage would shrink the logos too far, so stack them instead. */
+@media (max-width: 700px) {
+  .design-collage {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 24px;
+    align-items: center;
+    justify-items: center;
+    margin: 0;
+    aspect-ratio: auto;
+  }
+
+  .design-piece {
+    position: static;
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .design-piece-bnks-badge,
+  .design-piece-bnks-mun {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Keep the body tall enough for the side word, even when a filter leaves only a few entries. */
+.section-body:has(.side-word) {
+  min-height: calc(123px + 1474px);
+}
+
+@media (max-width: 960px) {
+  .section-body:has(.side-word) {
+    min-height: 0;
+  }
 }
 
 .side-word {
@@ -288,12 +423,308 @@ button {
   margin: 0 0 1em;
 }
 
+.about-intro {
+  position: relative;
+  max-width: 644px;
+}
+
+.profile-photo {
+  display: block;
+  width: 220px;
+  height: auto;
+  margin: 0 0 48px;
+  object-fit: cover;
+  transform: rotate(2deg);
+}
+
+@media (min-width: 1280px) {
+  .profile-photo {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 56px);
+    margin: 0;
+  }
+}
+
+/* Skip link */
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  padding: 8px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+#content:focus {
+  outline: none;
+}
+
+/* Home call to action */
+
+.home-cta {
+  margin: 28px 0 0;
+  font-size: 20px;
+  line-height: normal;
+  text-align: center;
+}
+
+.home-cta a {
+  font-weight: 700;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+/* Contact form */
+
+.contact-form-section {
+  margin-bottom: 64px;
+}
+
+.contact-intro {
+  margin: 0 0 32px;
+  font-family: var(--font-voice);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.contact-form {
+  display: grid;
+  gap: 28px;
+}
+
+.contact-field {
+  display: grid;
+  gap: 6px;
+}
+
+.contact-field label {
+  font-size: 15px;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.contact-field textarea {
+  min-height: 160px;
+  padding: 10px 12px;
+  border: 1px solid var(--ink);
+  resize: vertical;
+}
+
+.contact-field input:focus-visible,
+.contact-field textarea:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.contact-field [aria-invalid='true'] {
+  border-color: #a0001b;
+  border-width: 2px;
+}
+
+.contact-field-error {
+  margin: 0;
+  color: #a0001b;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.contact-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+}
+
+.contact-submit,
+.pill-link {
+  display: inline-block;
+  padding: 10px 24px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: normal;
+  text-decoration: none;
+}
+
+.contact-submit:hover,
+.pill-link:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+.contact-submit:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.contact-response-time {
+  flex: 1 1 220px;
+  margin: 0;
+  font-size: 15px;
+}
+
+.contact-status {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.contact-status:empty {
+  display: none;
+}
+
+/* Thank-you, 404, and privacy pages */
+
+.message-lead {
+  margin: 0;
+  font-family: var(--font-voice);
+  font-size: clamp(20px, 3vw, 26px);
+  line-height: 1.4;
+}
+
+.message-actions {
+  margin: 40px 0 0;
+}
+
+.not-found-title {
+  display: inline-block;
+  animation: not-found-drift 6s ease-in-out infinite;
+}
+
+@keyframes not-found-drift {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-2deg) translateY(-6px);
+  }
+}
+
+.privacy-updated {
+  margin-bottom: 24px;
+}
+
+.privacy-section + .privacy-section {
+  margin-top: 48px;
+}
+
+.privacy-body {
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.privacy-body p {
+  margin: 0 0 14px;
+}
+
+.privacy-list {
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+.privacy-list li + li {
+  margin-top: 12px;
+}
+
+.text-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: var(--font-body);
+  font-size: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Analytics consent */
+
+.consent-banner {
+  /* Top of the screen: every page has open space there, while the home page's nav sits at the bottom. */
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  left: 16px;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 18px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.consent-banner p {
+  flex: 1 1 320px;
+  margin: 0;
+}
+
+.consent-actions {
+  display: flex;
+  gap: 20px;
+}
+
 .section-footer {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 40px;
-  padding: 120px 49px 29px 16px;
+  padding: 120px 49px 29px var(--gutter);
+}
+
+.footer-privacy {
+  margin-right: auto;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.footer-privacy:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .back-to-top {
@@ -314,9 +745,18 @@ button {
 
 @media (max-width: 600px) {
   .section-footer {
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 24px;
+    gap: 16px 24px;
     padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .footer-privacy {
+    order: 3;
+    width: 100%;
+    margin-right: 0;
+    text-align: center;
   }
 
   .entry-section-label {
@@ -325,7 +765,8 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track {
+  .marquee-track,
+  .not-found-title {
     animation: none;
   }
 }

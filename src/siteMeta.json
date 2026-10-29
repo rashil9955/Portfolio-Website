@@ -1,0 +1,61 @@
+{
+  "siteName": "Rashil Shibakoti",
+  "origin": "https://rshibak.com",
+  "image": {
+    "path": "/og-image.png",
+    "width": 1200,
+    "height": 630,
+    "alt": "Rashil Shibakoti — software, accessibility, and creative work"
+  },
+  "routes": {
+    "home": {
+      "path": "/",
+      "file": "index.html",
+      "title": "Rashil Shibakoti | Software, Accessibility & Creative Work",
+      "description": "Rashil Shibakoti writes, codes, and designs. A Computer Science student at South Dakota State University who loves making technology more accessible.",
+      "index": true
+    },
+    "work": {
+      "path": "/work",
+      "file": "work.html",
+      "title": "Work | Rashil Shibakoti",
+      "description": "Experience, projects, and community work, from digital accessibility at South Dakota State University to a hand-built drone and a BB-8 robot.",
+      "index": true
+    },
+    "about": {
+      "path": "/about",
+      "file": "about.html",
+      "title": "About Rashil Shibakoti | Background & Interests",
+      "description": "A Computer Science student from Nepal interested in software engineering, AI, accessibility, data, and design. Background, education, and a few common questions.",
+      "index": true
+    },
+    "contact": {
+      "path": "/contact",
+      "file": "contact.html",
+      "title": "Contact | Rashil Shibakoti",
+      "description": "Have something interesting in mind? Send Rashil a message through the contact form, or find him on LinkedIn and GitHub.",
+      "index": true
+    },
+    "privacy": {
+      "path": "/privacy",
+      "file": "privacy.html",
+      "title": "Privacy Policy | Rashil Shibakoti",
+      "description": "What happens to the information you share on rshibak.com: the contact form, analytics, cookies, and the services involved, in plain language.",
+      "index": true
+    },
+    "thankYou": {
+      "path": "/thank-you",
+      "file": "thank-you.html",
+      "title": "Thank You | Rashil Shibakoti",
+      "description": "Thanks for getting in touch.",
+      "index": false
+    },
+    "notFound": {
+      "path": null,
+      "file": "404.html",
+      "title": "Page Not Found | Rashil Shibakoti",
+      "description": "This page doesn't exist, but the rest of the site does.",
+      "index": false
+    }
+  }
+}
