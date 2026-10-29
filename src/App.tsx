@@ -550,7 +550,6 @@ function WorkPage() {
       active="work"
       // The collage runs to the right edge, where the side word would sit on top of it.
       sideWord={filter === 'Graphic Design' ? undefined : 'WORK'}
-      navFirst
       heroExtra={
         <div className="work-filters" role="group" aria-label="Filter work by category">
           {workFilters.map((option) => (
@@ -580,7 +579,6 @@ function SectionPage({
   active,
   sideWord,
   titleClassName,
-  navFirst = false,
   heroExtra,
   children,
 }: {
@@ -589,21 +587,17 @@ function SectionPage({
   active?: NavRoute;
   sideWord?: string;
   titleClassName?: string;
-  navFirst?: boolean;
   heroExtra?: ReactNode;
   children: ReactNode;
 }) {
-  const nav = <SiteNav active={active} label="Main navigation" />;
-
   return (
     <main className="page section-page">
-      <header className={`section-hero${navFirst ? ' section-hero-nav-first' : ''}`}>
+      <header className="section-hero">
         <Marquee text={`${marquee}   ${marquee}   ${marquee} `} />
-        {navFirst ? nav : null}
         <h1 className={`display-title section-title${titleClassName ? ` ${titleClassName}` : ''}`}>
           {title}
         </h1>
-        {navFirst ? null : nav}
+        <SiteNav active={active} label="Main navigation" />
         {heroExtra}
       </header>
       <div id="content" className="section-body" tabIndex={-1}>

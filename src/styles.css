@@ -7,6 +7,9 @@
   --font-voice: "Comfortaa", "Trebuchet MS", sans-serif;
   --font-body: "Darker Grotesque", "Helvetica Neue", Arial, sans-serif;
   --gutter: clamp(16px, 7.7vw, 111px);
+  /* Shared hero rhythm, so every page's title sits at the same height as the home page's. */
+  --hero-marquee-top: clamp(24px, 18.35svh, 311px);
+  --hero-title-gap: clamp(24px, 5.6svh, 94px);
   color-scheme: light;
   background: var(--paper);
 }
@@ -130,11 +133,13 @@ button {
 }
 
 .home-spacer-top {
-  flex: 311 1 0;
+  flex: none;
+  height: var(--hero-marquee-top);
 }
 
 .home-spacer-title {
-  flex: 94 1 0;
+  flex: none;
+  height: var(--hero-title-gap);
 }
 
 .home-spacer-bio {
@@ -167,26 +172,18 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: min(311px, 26svh) 16px 0;
+  padding: var(--hero-marquee-top) 16px 0;
 }
 
 .section-title {
-  margin-top: min(352px, 30svh);
+  margin-top: var(--hero-title-gap);
 }
 
 .section-hero .site-nav {
   margin-top: 31px;
 }
 
-/* Work: the nav sits above the title, and category filters sit below it. */
-.section-hero-nav-first .site-nav {
-  margin-top: min(352px, 30svh);
-}
-
-.section-hero-nav-first .section-title {
-  margin-top: 31px;
-}
-
+/* Work: category filters sit below the nav. */
 .work-filters {
   display: flex;
   flex-wrap: wrap;
