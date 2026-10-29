@@ -370,6 +370,8 @@ function App() {
     initAnalytics();
   }, []);
 
+  useEffect(() => trackSpotlight(), []);
+
   useEffect(() => {
     applyRouteMeta(route);
     trackPageView(document.title);
@@ -384,6 +386,21 @@ function App() {
       <AnalyticsConsentBanner />
     </>
   );
+}
+
+// Feeds the pointer position to the big titles, which tint the letters near the cursor (see .display-title in styles.css).
+function trackSpotlight() {
+  const handleMove = (event: PointerEvent) => {
+    if (event.pointerType !== 'mouse') return;
+    const target = event.target instanceof Element ? event.target.closest<HTMLElement>('.display-title, .side-word') : null;
+    if (!target) return;
+    const rect = target.getBoundingClientRect();
+    target.style.setProperty('--spot-x', `${event.clientX - rect.left}px`);
+    target.style.setProperty('--spot-y', `${event.clientY - rect.top}px`);
+  };
+
+  document.addEventListener('pointermove', handleMove, { passive: true });
+  return () => document.removeEventListener('pointermove', handleMove);
 }
 
 function Page({ route }: { route: RouteKey }) {
@@ -647,7 +664,8 @@ function SiteNav({ active, label = 'Main navigation' }: { active?: NavRoute; lab
         const { label, href } = active === item.route ? { label: 'ME', href: '/' } : { label: item.label, href: `/${item.route}` };
         return (
           <InternalLink key={item.route} href={href}>
-            <span className="site-nav-label" data-label={label}>
+            {/* Always reserve the page name's width, so swapping in "ME" doesn't shift the row. */}
+            <span className="site-nav-label" data-label={item.label}>
               {label}
             </span>
           </InternalLink>

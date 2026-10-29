@@ -1,6 +1,8 @@
 import type { MouseEvent } from 'react';
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import siteMeta from './siteMeta.json';
+import { morphTitleFrom } from './titleMorph';
 
 export type RouteKey = keyof typeof siteMeta.routes;
 
@@ -74,5 +76,39 @@ export function handleInternalLinkClick(event: MouseEvent<HTMLAnchorElement>) {
     return;
   }
   event.preventDefault();
-  navigate(anchor.pathname);
+
+  // Nav links morph letter by letter into the next page's big title (see titleMorph.ts).
+  const label = anchor.closest('.site-nav') ? anchor.querySelector<HTMLElement>('.site-nav-label') : null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!label?.firstChild || reduceMotion || anchor.pathname === window.location.pathname) {
+    navigate(anchor.pathname);
+    return;
+  }
+
+  // The word's own text box (the label itself is padded to the widest nav word), and each letter's box.
+  const word = label.firstChild;
+  const range = document.createRange();
+  range.selectNodeContents(word);
+  const from = range.getBoundingClientRect();
+  const fromLetters = Array.from(word.textContent ?? '', (_, i) => {
+    range.setStart(word, i);
+    range.setEnd(word, i + 1);
+    return range.getBoundingClientRect();
+  });
+  const go = () => {
+    flushSync(() => navigate(anchor.pathname));
+    morphTitleFrom(from, fromLetters);
+  };
+
+  if (!document.startViewTransition) {
+    go();
+    return;
+  }
+
+  // Crossfade the rest of the page; the clicked word leaves the old snapshot so its letters can fly out.
+  label.style.visibility = 'hidden';
+  document.startViewTransition(() => {
+    label.style.visibility = '';
+    go();
+  });
 }
